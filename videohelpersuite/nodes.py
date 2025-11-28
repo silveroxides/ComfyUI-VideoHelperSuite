@@ -300,7 +300,7 @@ class VideoCombine:
         if isinstance(images, torch.Tensor) and images.size(0) == 0:
             return ((save_output, []),)
         num_frames = len(images)
-        pbar = ProgressBar(num_frames)
+        # pbar = ProgressBar(num_frames)
         if vae is not None:
             downscale_ratio = getattr(vae, "downscale_ratio", 8)
             width = images.size(-1)*downscale_ratio
@@ -405,7 +405,7 @@ class VideoCombine:
                 images = to_pingpong(images)
             def frames_gen(images):
                 for i in images:
-                    pbar.update(1)
+                    # pbar.update(1)
                     yield Image.fromarray(tensor_to_bytes(i))
             frames = frames_gen(images)
             # Use pillow directly to save an animated image
@@ -456,7 +456,7 @@ class VideoCombine:
                 images = to_pingpong(images)
                 if num_frames > 2:
                     num_frames += num_frames -2
-                    pbar.total = num_frames
+                    # pbar.total = num_frames
             if loop_count > 0:
                 loop_args = ["-vf", "loop=loop=" + str(loop_count)+":size=" + str(num_frames)]
             else:
@@ -536,7 +536,7 @@ class VideoCombine:
                     meta_batch.outputs[unique_id] = (counter, output_process)
 
             for image in images:
-                pbar.update(1)
+                # pbar.update(1)
                 output_process.send(image)
             if meta_batch is not None:
                 requeue_workflow((meta_batch.unique_id, not meta_batch.has_closed_inputs))
